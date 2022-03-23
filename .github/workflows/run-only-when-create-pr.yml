@@ -3,7 +3,6 @@ name: Secretlint
 #on: [pull_request]
 on:
   workflow_dispatch:
-  pull_request:
 
 # secretlint + git diff on Pull Request
 # https://github.com/secretlint/secretlint
