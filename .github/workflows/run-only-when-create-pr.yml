@@ -1,8 +1,6 @@
 name: Secretlint
 # https://github.com/secretlint/secretlint/issues/166
-#on: [pull_request]
-on:
-  push:
+on: [pull_request, push, workflow_dispatch]
 
 # secretlint + git diff on Pull Request
 # https://github.com/secretlint/secretlint
