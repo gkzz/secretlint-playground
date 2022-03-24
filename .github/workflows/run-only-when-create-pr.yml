@@ -27,8 +27,10 @@ jobs:
           run: secretlint ${{ env.GIT_DIFF_FILTERED }}
         if: env.GIT_DIFF && !env.MATCHED_FILES
       - name: echo stdout of secretlint
+        needs: run-secretlint-command
         if: success()
         run: echo ${{ steps.run-secretlint-command.outputs.stdout }}
       - name: echo stderr of secretlint
+        needs: run-secretlint-command
         if: failure()
         run: echo ${{ steps.run-secretlint-command.outputs.stderr }}
