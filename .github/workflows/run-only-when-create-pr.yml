@@ -22,3 +22,8 @@ jobs:
       - name: Lint with Secretlint
         run: npx --no-install secretlint ${{ env.GIT_DIFF_FILTERED }}
         if: env.GIT_DIFF && !env.MATCHED_FILES
+
+
+  $ docker run --rm -v "$PWD:$PWD" -w="$PWD" \
+  --entrypoint yq linuxserver/yq \
+  <yqコマンド>
