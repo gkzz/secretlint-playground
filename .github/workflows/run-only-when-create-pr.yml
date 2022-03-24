@@ -14,6 +14,7 @@ jobs:
         uses: actions/checkout@v2
       - uses: technote-space/get-diff-action@v4
       - name: run secretlint command on docker
+        id: run-secretlint-command
         uses: addnab/docker-run-action@v3
         with:
           # https://hub.docker.com/r/secretlint/secretlint/tags
@@ -25,11 +26,9 @@ jobs:
             --rm
           run: secretlint ${{ env.GIT_DIFF_FILTERED }}
         if: env.GIT_DIFF && !env.MATCHED_FILES
-      - name: echo
-        run: |
-          echo "GIT_DIFF_FILTERED: ${{ env.GIT_DIFF_FILTERED }}"
-          echo "##########"
-          echo "GIT_DIFF: ${{ env.GIT_DIFF }}"
-          echo "##########"
-          echo "MATCHED_FILES: ${{ env.MATCHED_FILES }}"
-          echo "##########"
+      - name: echo stdout of secretlint
+        if: success()
+        run: echo ${{ steps.run-secretlint-command.outputs.stdout }}
+      - name: echo stderr of secretlint
+        if: failure()
+        run: echo ${{ steps.run-secretlint-command.outputs.stderr }}
