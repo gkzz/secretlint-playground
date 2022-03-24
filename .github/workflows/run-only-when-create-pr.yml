@@ -18,7 +18,7 @@ jobs:
         with:
           # https://hub.docker.com/r/secretlint/secretlint/tags
           image: secretlint/secretlint:v5.1.1
-        options: >
+          options: >
           --rm -v ${{ github.workspace }}:/opt
           -w=/opt
           --entrypoint secretlint            
