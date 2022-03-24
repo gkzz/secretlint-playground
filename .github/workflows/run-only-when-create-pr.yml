@@ -1,6 +1,6 @@
 name: Secretlint
 # https://github.com/secretlint/secretlint/issues/166
-on: [pull_request, workflow_dispatch]
+on: [pull_request]
 
 # secretlint + git diff on Pull Request
 # https://github.com/secretlint/secretlint
@@ -24,11 +24,6 @@ jobs:
             -v ${{ github.workspace }}:${{ github.workspace }}
             -w=${{ github.workspace }}
             --rm
-          run: secretlint ${{ env.GIT_DIFF_FILTERED }}
+          run: secretlint ${{ env.GIT_DIFF_FILTERED }} # run only on changed files
+          #run: secretlint "**/*" # run on all files under github.workspace directory
         if: env.GIT_DIFF && !env.MATCHED_FILES
-      - name: echo stdout of secretlint
-        if: success()
-        run: echo ${{ steps.run-secretlint-command.outputs.stdout }}
-      - name: echo stderr of secretlint
-        if: failure()
-        run: echo ${{ steps.run-secretlint-command.outputs.stderr }}
