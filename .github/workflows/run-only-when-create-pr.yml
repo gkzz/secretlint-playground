@@ -23,7 +23,6 @@ jobs:
             -v ${{ github.workspace }}:${{ github.workspace }}
             -w=${{ github.workspace }}
             --rm
-          shell: bash
           run: secretlint ${{ env.GIT_DIFF_FILTERED }}
         if: env.GIT_DIFF && !env.MATCHED_FILES
       - name: echo
