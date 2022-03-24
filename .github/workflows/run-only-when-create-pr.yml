@@ -13,14 +13,17 @@ jobs:
       - name: checkout
         uses: actions/checkout@v2
       - uses: technote-space/get-diff-action@v4
-      - name: setup Node.js
-        uses: actions/setup-node@v2
+      - name: run secretlint command on docker
+        uses: addnab/docker-run-action@v3
         with:
-          node-version: 14
-      - name: Install
-        run: npm install
-      - name: Lint with Secretlint
-        run: npx --no-install secretlint ${{ env.GIT_DIFF_FILTERED }}
+          # https://hub.docker.com/r/secretlint/secretlint/tags
+          image: secretlint/secretlint:v5.1.1
+        options: >
+          --rm -v ${{ github.workspace }}:/opt
+          -w=/opt
+          --entrypoint secretlint            
+          shell: bash
+          run: secretlint "**/*"
         if: env.GIT_DIFF && !env.MATCHED_FILES
       - name: echo
         run: |
