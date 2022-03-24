@@ -21,9 +21,8 @@ jobs:
           options: >
             --rm -v ${{ github.workspace }}:/opt
             -w=/opt
-            --entrypoint secretlint
           shell: bash
-          run: secretlint "**/*"
+          run: secretlint ${{ env.GIT_DIFF_FILTERED }}
         if: env.GIT_DIFF && !env.MATCHED_FILES
       - name: echo
         run: |
