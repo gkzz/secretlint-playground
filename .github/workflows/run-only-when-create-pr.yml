@@ -22,3 +22,11 @@ jobs:
       - name: Lint with Secretlint
         run: npx --no-install secretlint ${{ env.GIT_DIFF_FILTERED }}
         if: env.GIT_DIFF && !env.MATCHED_FILES
+      - name: echo
+        run: |
+          echo "GIT_DIFF_FILTERED: ${{ env.GIT_DIFF_FILTERED }}"
+          echo "##########"
+          echo "GIT_DIFF: ${{ env.GIT_DIFF }}"
+          echo "##########"
+          echo "MATCHED_FILES: ${{ env.MATCHED_FILES }}"
+          echo "##########"
