@@ -19,9 +19,9 @@ jobs:
           # https://hub.docker.com/r/secretlint/secretlint/tags
           image: secretlint/secretlint:v5.1.1
           options: >
-          --rm -v ${{ github.workspace }}:/opt
-          -w=/opt
-          --entrypoint secretlint            
+            --rm -v ${{ github.workspace }}:/opt
+            -w=/opt
+            --entrypoint secretlint
           shell: bash
           run: secretlint "**/*"
         if: env.GIT_DIFF && !env.MATCHED_FILES
