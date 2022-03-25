@@ -1,6 +1,6 @@
 name: Secretlint
 # https://github.com/secretlint/secretlint/issues/166
-on: [pull_request, workflow_dispatch]
+on: [pull_request]
 
 # secretlint + git diff on Pull Request
 # https://github.com/secretlint/secretlint
@@ -11,22 +11,19 @@ jobs:
     runs-on: ubuntu-18.04
     steps:
       - name: checkout
-        uses: actions/checkout@v2
-      - uses: technote-space/get-diff-action@v4
-      - name: setup Node.js
-        uses: actions/setup-node@v2
+        uses: actions/checkout@v3
+      - uses: technote-space/get-diff-action@v6
+      - name: run secretlint command on docker
+        id: run-secretlint-command
+        uses: addnab/docker-run-action@v3
         with:
-          node-version: 14
-      - name: Install
-        run: npm install
-      - name: Lint with Secretlint
-        run: npx --no-install secretlint ${{ env.GIT_DIFF_FILTERED }}
+          # https://hub.docker.com/r/secretlint/secretlint/tags
+          image: secretlint/secretlint:v5.1.1
+          # https://github.com/secretlint/secretlint#using-docker
+          options: >
+            -v ${{ github.workspace }}:${{ github.workspace }}
+            -w=${{ github.workspace }}
+            --rm
+          run: secretlint ${{ env.GIT_DIFF_FILTERED }} # run only on changed files
+          #run: secretlint "**/*" # run on all files under github.workspace directory
         if: env.GIT_DIFF && !env.MATCHED_FILES
-      - name: echo
-        run: |
-          echo "GIT_DIFF_FILTERED: ${{ env.GIT_DIFF_FILTERED }}"
-          echo "##########"
-          echo "GIT_DIFF: ${{ env.GIT_DIFF }}"
-          echo "##########"
-          echo "MATCHED_FILES: ${{ env.MATCHED_FILES }}"
-          echo "##########"
